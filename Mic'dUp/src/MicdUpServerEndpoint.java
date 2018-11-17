@@ -16,8 +16,6 @@ import javax.websocket.Session;
 @ServerEndpoint("/micdUpServerEndpoint")
 public class MicdUpServerEndpoint {
 	
-	private boolean isButtonPressed = false;
-	
 	AudioTransmitter audioTransmitter = new AudioTransmitter();
 
 	static Set<Session> audience = Collections.synchronizedSet(new HashSet<Session>());

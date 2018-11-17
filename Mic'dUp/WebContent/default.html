@@ -17,15 +17,29 @@
 				}
 				if (message == "Enter"){
 					document.getElementById("startRecordButton").style.visibility = "visible";	
-					document.getElementById("stopRecordButton").style.visibility = "visible";	
+					document.getElementById("stopRecordButton").style.visibility = "visible";
+					
+					document.getElementById("audienceInput").style.visibility = "hidden";
+					document.getElementById("enterButton").style.visibility = "hidden";
+					document.getElementById("audienceButton").style.visibility = "hidden";
+					document.getElementById("hostButton").style.visibility = "hidden";
+					document.getElementById("inputCode").style.visibility = "hidden";
+				}
+				if (message == "Host") {					
+					document.getElementById("inputCode").style.visibility = "visible";
+					document.getElementById("audienceInput").style.visibility = "hidden";
+					document.getElementById("enterButton").style.visibility = "hidden";
+					document.getElementById("audienceButton").style.visibility = "hidden";
+					document.getElementById("hostButton").style.visibility = "hidden";
 				}
 			}
 		</script>
 	</head>
 	<body>
 		<textarea id="messagesTextArea" readonly="readonly" rows="10" cols="45"></textarea><br/>	
-		<input type="button" value="Host" onClick="sendMessage(value);" />
-		<input type="button" value="Audience" onClick="sendMessage(value);"/><br/>
+		<input type="button" id="hostButton" value="Host" onClick="sendMessage(value);" />
+		<input type="button" id="audienceButton" value="Audience" onClick="sendMessage(value);"/><br/>
+		<p id="inputCode" style="visibility: hidden;">Your room code is: AJKD8
 		<p id="audienceInput" style="visibility: hidden;">Please enter code: <input type="text"/>
 		<input type="button" id="enterButton" value="Enter" onClick="sendMessage(value)" style="visibility: hidden;"> </p>
 		<!--Audience Buttons-->
