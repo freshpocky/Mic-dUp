@@ -11,8 +11,11 @@
 			}
 			function sendMessage(message) {
 				websocket.send(message);
-				document.getElementById("audienceInput").style.visibility = "visible";
 				if (message == "Audience") {
+					document.getElementById("audienceInput").style.visibility = "visible";
+					document.getElementById("enterButton").style.visibility = "visible";
+				}
+				if (message == "Enter"){
 					document.getElementById("startRecordButton").style.visibility = "visible";	
 					document.getElementById("stopRecordButton").style.visibility = "visible";	
 				}
@@ -23,12 +26,11 @@
 		<textarea id="messagesTextArea" readonly="readonly" rows="10" cols="45"></textarea><br/>	
 		<input type="button" value="Host" onClick="sendMessage(value);" />
 		<input type="button" value="Audience" onClick="sendMessage(value);"/><br/>
-		<p id="audienceInput" style="visibility: hidden;">Please enter code: <input type="text"/></p>
-		
+		<p id="audienceInput" style="visibility: hidden;">Please enter code: <input type="text"/>
+		<input type="button" id="enterButton" value="Enter" onClick="sendMessage(value)" style="visibility: hidden;"> </p>
 		<!--Audience Buttons-->
 		<br/>
 		<input type="button" id="startRecordButton" value="Start" onClick="sendMessage(value)" style="visibility: hidden;"> 	
-		<input type="button" id="stopRecordButton" value="Stop" onClick="sendMessage(value)" style="visibility: hidden;"> 		
-		
+		<input type="button" id="stopRecordButton" value="Stop" onClick="sendMessage(value)" style="visibility: hidden;"> 	
 	</body>
 </html>

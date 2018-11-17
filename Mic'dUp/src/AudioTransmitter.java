@@ -53,23 +53,30 @@ public class AudioTransmitter {
 
 	public AudioTransmitter() {
 		try {
-			info = new DataLine.Info(SourceDataLine.class, audioFormat);
-			sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-			sourceLine.open();
-
-			info = new DataLine.Info(TargetDataLine.class, audioFormat);
-			targetLine = (TargetDataLine) AudioSystem.getLine(info);
-			targetLine.open();
-
-			out = new ByteArrayOutputStream();		
-		} 
+		info = new DataLine.Info(SourceDataLine.class, audioFormat);
+		sourceLine = (SourceDataLine) AudioSystem.getLine(info);
 		
+		info = new DataLine.Info(TargetDataLine.class, audioFormat);
+		targetLine = (TargetDataLine) AudioSystem.getLine(info);
+		
+		out = new ByteArrayOutputStream();	
+		
+		}
 		catch (LineUnavailableException lue) {
 			lue.printStackTrace();			
 		}
 	}
 
 	public void StartRecording() {
+		try {
+			sourceLine.open();
+			targetLine.open();	
+		} 
+		
+		catch (LineUnavailableException lue) {
+			lue.printStackTrace();			
+		}
+		
 		targetThread.start();
 		System.out.println("Started Recording...");
 		sourceThread.start();
