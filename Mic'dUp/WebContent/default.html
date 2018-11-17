@@ -12,6 +12,10 @@
 			function sendMessage(message) {
 				websocket.send(message);
 				document.getElementById("audienceInput").style.visibility = "visible";
+				if (message == "Audience") {
+					document.getElementById("startRecordButton").style.visibility = "visible";	
+					document.getElementById("stopRecordButton").style.visibility = "visible";	
+				}
 			}
 		</script>
 	</head>
@@ -20,5 +24,11 @@
 		<input type="button" value="Host" onClick="sendMessage(value);" />
 		<input type="button" value="Audience" onClick="sendMessage(value);"/><br/>
 		<p id="audienceInput" style="visibility: hidden;">Please enter code: <input type="text"/></p>
-			</body>
+		
+		<!--Audience Buttons-->
+		<br/>
+		<input type="button" id="startRecordButton" value="Start" onClick="sendMessage(value)" style="visibility: hidden;"> 	
+		<input type="button" id="stopRecordButton" value="Stop" onClick="sendMessage(value)" style="visibility: hidden;"> 		
+		
+	</body>
 </html>

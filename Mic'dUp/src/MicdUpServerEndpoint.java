@@ -25,17 +25,24 @@ public class MicdUpServerEndpoint {
 	
 	@OnMessage
 	public void handleMessage(String message, Session userSession) throws IOException {
-		String test = (String) userSession.getUserProperties().get("test");
-		if (test == null) {
+		
+		String username = (String) userSession.getUserProperties().get("username");
+		if (username == null) {
 			userSession.getUserProperties().put("username", message);
 			userSession.getBasicRemote().sendText(buildJsonData("System", "you are now connected as " + message));
-			new AudioTransmitter(true);
 		}
 		else {
+			if (message.equals("Start")) {
+				System.out.println("Start Button Pressed");
+			}
+			else if (message.equals("Stop")) {
+				System.out.println("Stop Button Pressed");
+			}
 			Iterator<Session> iterator = audience.iterator();
 			while (iterator.hasNext())
-				iterator.next().getBasicRemote().sendText(buildJsonData(test, message));
+				iterator.next().getBasicRemote().sendText(buildJsonData(username, message));
 		}
+		
 	}
 	
 	@OnClose
