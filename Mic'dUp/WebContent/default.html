@@ -9,14 +9,16 @@
 				var jsonData = JSON.parse(message.data);
 				if (jsonData.message != null) messagesTextArea.value += jsonData.message + "\n";
 			}
-			function sendMessage() {
-				websocket.send(messageText.value);
-				messageText.value = "";
+			function sendMessage(message) {
+				websocket.send(message);
+				document.getElementById("audienceInput").style.visibility = "visible";
 			}
 		</script>
 	</head>
 	<body>
 		<textarea id="messagesTextArea" readonly="readonly" rows="10" cols="45"></textarea><br/>	
-		<input type="text" id="messageText" size="50" /><input type="button" value="Send" onClick="sendMessage();" />
-	</body>
+		<input type="button" value="Host" onClick="sendMessage(value);" />
+		<input type="button" value="Audience" onClick="sendMessage(value);"/><br/>
+		<p id="audienceInput" style="visibility: hidden;">Please enter code: <input type="text"/></p>
+			</body>
 </html>
