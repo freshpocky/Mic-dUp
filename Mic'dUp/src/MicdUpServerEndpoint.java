@@ -29,6 +29,7 @@ public class MicdUpServerEndpoint {
 		if (username == null) {
 			userSession.getUserProperties().put("username", message);
 			userSession.getBasicRemote().sendText(buildJsonData("System", "you are now connected as " + message));
+			new Main();
 		}
 		else {
 			Iterator<Session> iterator = audience.iterator();
