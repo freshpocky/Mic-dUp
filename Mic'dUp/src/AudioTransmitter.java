@@ -1,10 +1,15 @@
 import java.io.ByteArrayOutputStream;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.TargetDataLine;
 
-public class Main {
-
-	public Main() {
+public class AudioTransmitter {
+	
+	public AudioTransmitter(boolean buttonStatus) {
 		AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
 
 		try {
@@ -63,8 +68,5 @@ public class Main {
 			ie.printStackTrace();
 		}
 	}
-
-	public static void main(String[] args) {
-		new Main();
-	}
+	
 }
