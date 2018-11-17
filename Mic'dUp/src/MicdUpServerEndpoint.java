@@ -15,6 +15,10 @@ import javax.websocket.Session;
 
 @ServerEndpoint("/micdUpServerEndpoint")
 public class MicdUpServerEndpoint {
+	
+	private boolean isButtonPressed = false;
+	
+	AudioTransmitter audioTransmitter = new AudioTransmitter();
 
 	static Set<Session> audience = Collections.synchronizedSet(new HashSet<Session>());
 
@@ -34,9 +38,12 @@ public class MicdUpServerEndpoint {
 		else {
 			if (message.equals("Start")) {
 				System.out.println("Start Button Pressed");
+				audioTransmitter.StartRecording();
 			}
 			else if (message.equals("Stop")) {
 				System.out.println("Stop Button Pressed");
+				audioTransmitter.StopRecording();
+				
 			}
 			Iterator<Session> iterator = audience.iterator();
 			while (iterator.hasNext())

@@ -9,64 +9,74 @@ import javax.sound.sampled.TargetDataLine;
 
 public class AudioTransmitter {
 	
-	public AudioTransmitter(boolean buttonStatus) {
-		AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
+	//.wav audio format
+	private AudioFormat audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
+	
+	private DataLine.Info info;
+	
+	private SourceDataLine sourceLine;
+	
+	private TargetDataLine targetLine;
+	
+	private ByteArrayOutputStream out;
+	
+	private Thread sourceThread = new Thread() {
+		@Override
+		public void run() {
+			sourceLine.start();
+			while (true) {
+				sourceLine.write(out.toByteArray(), 0, out.size());
+			}
+		}
+	};
 
+	private Thread targetThread = new Thread() {
+		@Override
+		public void run() {
+			targetLine.start();
+			byte[] data = new byte[targetLine.getBufferSize() / 5];
+			int readBytes;
+			while (true) {
+				readBytes = targetLine.read(data, 0, data.length);
+				out.write(data, 0, readBytes);
+			}
+		}
+	};
+
+	public AudioTransmitter() {
 		try {
-			DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-			final SourceDataLine sourceLine = (SourceDataLine) AudioSystem.getLine(info);
+			info = new DataLine.Info(SourceDataLine.class, audioFormat);
+			sourceLine = (SourceDataLine) AudioSystem.getLine(info);
 			sourceLine.open();
 
-			info = new DataLine.Info(TargetDataLine.class, format);
-			final TargetDataLine targetLine = (TargetDataLine) AudioSystem.getLine(info);
+			info = new DataLine.Info(TargetDataLine.class, audioFormat);
+			targetLine = (TargetDataLine) AudioSystem.getLine(info);
 			targetLine.open();
 
-			final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-			Thread sourceThread = new Thread() {
-				@Override
-				public void run() {
-					sourceLine.start();
-					while (true) {
-						sourceLine.write(out.toByteArray(), 0, out.size());
-					}
-				}
-			};
-
-			Thread targetThread = new Thread() {
-				@Override
-				public void run() {
-					targetLine.start();
-					byte[] data = new byte[targetLine.getBufferSize() / 5];
-					int readBytes;
-					while (true) {
-						readBytes = targetLine.read(data, 0, data.length);
-						out.write(data, 0, readBytes);
-					}
-
-				}
-			};
-
-			targetThread.start();
-			System.out.println("Started Recording...");
-			Thread.sleep(5000);
-			targetLine.stop();
-			targetLine.close();
-
-			System.out.println("Ended Recording...");
-			System.out.println("Starting Playback...");
-
-			sourceThread.start();
-			Thread.sleep(5000);
-			sourceLine.stop();
-			sourceLine.close();
-
-			System.out.println("Ended Playback...");
-		} catch (LineUnavailableException lue) {
-			lue.printStackTrace();
-		} catch (InterruptedException ie) {
-			ie.printStackTrace();
+			out = new ByteArrayOutputStream();		
+		} 
+		
+		catch (LineUnavailableException lue) {
+			lue.printStackTrace();			
 		}
 	}
-	
+
+	public void StartRecording() {
+		while(true) {
+			targetThread.start();
+			System.out.println("Started Recording...");
+			sourceThread.start();
+			System.out.println("Starting Playback...");
+		}
+	}
+
+	public void StopRecording() {
+		targetLine.stop();
+		targetLine.close();
+		System.out.println("Ended Recording...");
+			
+		sourceLine.stop();
+		sourceLine.close();
+		System.out.println("Ended Playback...");
+	}
 }
