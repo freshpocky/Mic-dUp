@@ -20,23 +20,31 @@ public class AudioTransmitter {
 	
 	private ByteArrayOutputStream out;
 	
+	private volatile boolean running;
+	
+	private void terminate() {
+		running = false;
+	}
+	
 	private Thread sourceThread = new Thread() {
 		@Override
 		public void run() {
+			running = true;
 			sourceLine.start();
-			while (true) {
+			while (running) {
 				sourceLine.write(out.toByteArray(), 0, out.size());
 			}
 		}
 	};
 
-	private Thread targetThread = new Thread() {
+	private Thread targetThread = new Thread() {		
 		@Override
 		public void run() {
+			running = true;
 			targetLine.start();
 			byte[] data = new byte[targetLine.getBufferSize() / 5];
 			int readBytes;
-			while (true) {
+			while (running) {
 				readBytes = targetLine.read(data, 0, data.length);
 				out.write(data, 0, readBytes);
 			}
@@ -62,15 +70,14 @@ public class AudioTransmitter {
 	}
 
 	public void StartRecording() {
-		while(true) {
-			targetThread.start();
-			System.out.println("Started Recording...");
-			sourceThread.start();
-			System.out.println("Starting Playback...");
-		}
+		targetThread.start();
+		System.out.println("Started Recording...");
+		sourceThread.start();
+		System.out.println("Starting Playback...");
 	}
 
 	public void StopRecording() {
+		terminate();
 		targetLine.stop();
 		targetLine.close();
 		System.out.println("Ended Recording...");
@@ -78,5 +85,5 @@ public class AudioTransmitter {
 		sourceLine.stop();
 		sourceLine.close();
 		System.out.println("Ended Playback...");
-	}
+	}	
 }

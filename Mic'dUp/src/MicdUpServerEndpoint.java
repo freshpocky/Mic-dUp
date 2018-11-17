@@ -40,7 +40,7 @@ public class MicdUpServerEndpoint {
 				System.out.println("Start Button Pressed");
 				audioTransmitter.StartRecording();
 			}
-			else if (message.equals("Stop")) {
+			if (message.equals("Stop")) {
 				System.out.println("Stop Button Pressed");
 				audioTransmitter.StopRecording();
 				
@@ -49,7 +49,6 @@ public class MicdUpServerEndpoint {
 			while (iterator.hasNext())
 				iterator.next().getBasicRemote().sendText(buildJsonData(username, message));
 		}
-		
 	}
 	
 	@OnClose
@@ -65,6 +64,5 @@ public class MicdUpServerEndpoint {
 			jsonWriter.write(jsonObject);
 		}
 		return stringWriter.toString();
-	}
-
+	}	
 }
